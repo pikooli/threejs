@@ -1,28 +1,24 @@
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import { EffectComposer, SSR } from "@react-three/postprocessing";
-import { BlendFunction, GlitchMode } from "postprocessing";
-import { useControls } from "leva";
-import Drunk from "./Drunk";
-import { useRef } from "react";
+import { EffectComposer, Glitch, Bloom } from "@react-three/postprocessing";
+import { GlitchMode } from "postprocessing";
 
 export default function Experience() {
-  // ref is not mandatory, it for in case we want to make change from outside
-  const drunkRef = useRef();
-  const controls = useControls("Drunk Effect", {
-    frequency: { value: 2, min: 1, max: 20 },
-    amplitude: { value: 0.1, min: 0, max: 1 },
-  });
   return (
     <>
       <color args={["#ffffff"]} attach="background" />
-      <EffectComposer>
-        <Drunk
-          ref={drunkRef}
-          drufrequency={controls.frequency}
-          amplitude={controls.amplitude}
-          blendFunction={BlendFunction.DARKEN}
+      <EffectComposer
+      // multisampling={0}
+      // multisampling={4}
+      >
+        <Glitch
+          delay={[0.5, 1]}
+          duration={[0.1, 0.3]}
+          strength={[0.2, 0.4]}
+          //   mode={GlitchMode.CONSTANT_MILD}
+          mode={GlitchMode.CONSTANT_WILD}
         />
+        <Bloom />
       </EffectComposer>
 
       <Perf position="top-left" />
@@ -49,7 +45,7 @@ export default function Experience() {
         scale={10}
       >
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" roughness={0} metalness={0} />
+        <meshStandardMaterial color="greenyellow" />
       </mesh>
     </>
   );

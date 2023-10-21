@@ -1,27 +1,18 @@
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import { EffectComposer, SSR } from "@react-three/postprocessing";
+import { EffectComposer, DepthOfField } from "@react-three/postprocessing";
 import { BlendFunction, GlitchMode } from "postprocessing";
-import { useControls } from "leva";
-import Drunk from "./Drunk";
-import { useRef } from "react";
 
 export default function Experience() {
-  // ref is not mandatory, it for in case we want to make change from outside
-  const drunkRef = useRef();
-  const controls = useControls("Drunk Effect", {
-    frequency: { value: 2, min: 1, max: 20 },
-    amplitude: { value: 0.1, min: 0, max: 1 },
-  });
   return (
     <>
       <color args={["#ffffff"]} attach="background" />
       <EffectComposer>
-        <Drunk
-          ref={drunkRef}
-          drufrequency={controls.frequency}
-          amplitude={controls.amplitude}
-          blendFunction={BlendFunction.DARKEN}
+        {/* Blur element when it to far of value of camera len */}
+        <DepthOfField
+          focusDistance={0.025}
+          focalLength={0.025}
+          bokehScale={6}
         />
       </EffectComposer>
 
@@ -49,7 +40,7 @@ export default function Experience() {
         scale={10}
       >
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" roughness={0} metalness={0} />
+        <meshStandardMaterial color="greenyellow" />
       </mesh>
     </>
   );

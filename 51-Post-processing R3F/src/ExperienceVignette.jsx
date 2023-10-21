@@ -1,27 +1,23 @@
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import { EffectComposer, SSR } from "@react-three/postprocessing";
-import { BlendFunction, GlitchMode } from "postprocessing";
-import { useControls } from "leva";
-import Drunk from "./Drunk";
-import { useRef } from "react";
+import { Vignette, EffectComposer } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 
 export default function Experience() {
-  // ref is not mandatory, it for in case we want to make change from outside
-  const drunkRef = useRef();
-  const controls = useControls("Drunk Effect", {
-    frequency: { value: 2, min: 1, max: 20 },
-    amplitude: { value: 0.1, min: 0, max: 1 },
-  });
   return (
     <>
+      {/* We add color to allow vignette to work on upper left and right of screen */}
       <color args={["#ffffff"]} attach="background" />
-      <EffectComposer>
-        <Drunk
-          ref={drunkRef}
-          drufrequency={controls.frequency}
-          amplitude={controls.amplitude}
-          blendFunction={BlendFunction.DARKEN}
+      <EffectComposer
+      // multisampling={0}
+      // multisampling={4}
+      >
+        {/* Add dark area on bottom corner of screen */}
+        <Vignette
+          offset={0.3}
+          darkness={0.9}
+          //   blendFunction={BlendFunction.COLOR_BURN}
+          blendFunction={BlendFunction.NORMAL}
         />
       </EffectComposer>
 
@@ -49,7 +45,7 @@ export default function Experience() {
         scale={10}
       >
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" roughness={0} metalness={0} />
+        <meshStandardMaterial color="greenyellow" />
       </mesh>
     </>
   );
